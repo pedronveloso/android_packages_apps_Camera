@@ -20,6 +20,7 @@
     <string-array name="pref_video_quality_entries" translatable="false">
         <item>@string/pref_video_quality_entry_hd</item>
         <item>@string/pref_video_quality_entry_high</item>
+        <item>@string/pref_video_quality_entry_wide</item>
         <item>@string/pref_video_quality_entry_low</item>
         <item>@string/pref_video_quality_entry_mms</item>
         <item>@string/pref_video_quality_entry_youtubehd</item>
@@ -29,6 +30,7 @@
     <string-array name="pref_video_quality_entryvalues" translatable="false">
         <item>hd</item>
         <item>high</item>
+        <item>wide</item>
         <item>low</item>
         <item>mms</item>
         <item>youtubehd</item>
@@ -38,6 +40,7 @@
     <array name="video_quality_icons" translatable="false">
         <item>@drawable/ic_viewfinder_video_quality_hd</item>
         <item>@drawable/ic_viewfinder_video_quality_high</item>
+        <item>@drawable/ic_viewfinder_video_quality_wide</item>
         <item>@drawable/ic_viewfinder_video_quality_low</item>
         <item>@drawable/ic_viewfinder_video_quality_mms</item>
         <item>@drawable/ic_viewfinder_video_quality_youtubehd</item>

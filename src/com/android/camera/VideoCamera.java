@@ -442,7 +442,7 @@ public class VideoCamera extends BaseCamera
         if (mParameters.isZoomSupported()) {
             mHeadUpDisplay.setZoomIndex(mZoomValue);
         }
-        FrameLayout frame = (FrameLayout) findViewById(R.id.frame);
+        FrameLayout frame = (FrameLayout) findViewById(R.id.framegl);
         mGLRootView = new GLRootView(this);
         frame.addView(mGLRootView);
         mGLRootView.setContentPane(mHeadUpDisplay);
@@ -627,7 +627,7 @@ public class VideoCamera extends BaseCamera
             videoQuality =
                     intent.getIntExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
             if (videoQuality < CamcorderProfile.QUALITY_LOW ||
-                    videoQuality > CamcorderProfile.QUALITY_HD) {
+                    videoQuality > CamcorderProfile.QUALITY_WIDE) {
                 videoQuality = CamcorderProfile.QUALITY_HIGH;
             }
         }

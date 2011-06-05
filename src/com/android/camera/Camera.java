@@ -410,8 +410,8 @@ public class Camera extends BaseCamera implements View.OnClickListener,
         mCameraDevice.setZoomChangeListener(mZoomListener);
     }
 
-    private void onZoomValueChanged(int index) {
-        if (mSmoothZoomSupported) {
+    private void onZoomValueChanged(int index) {  
+     /*   if (mSmoothZoomSupported) {
             if (mTargetZoomValue != index && mZoomState != ZOOM_STOPPED) {
                 mTargetZoomValue = index;
                 if (mZoomState == ZOOM_START) {
@@ -423,10 +423,10 @@ public class Camera extends BaseCamera implements View.OnClickListener,
                 mCameraDevice.startSmoothZoom(index);
                 mZoomState = ZOOM_START;
             }
-        } else {
+        } else { */
             mZoomValue = index;
             setCameraParametersWhenIdle(UPDATE_PARAM_ZOOM);
-        }
+       // }
     }
 
     private float[] getZoomRatios() {
@@ -1048,7 +1048,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
         if (mParameters.isZoomSupported()) {
             mHeadUpDisplay.setZoomIndex(mZoomValue);
         }
-        FrameLayout frame = (FrameLayout) findViewById(R.id.frame);
+        FrameLayout frame = (FrameLayout) findViewById(R.id.framegl);
         mGLRootView = new GLRootView(this);
         mGLRootView.setContentPane(mHeadUpDisplay);
         frame.addView(mGLRootView);
@@ -1754,14 +1754,23 @@ public class Camera extends BaseCamera implements View.OnClickListener,
             // was already started. That means preview display was set to null
             // and we need to set it now.
             setPreviewDisplay(holder);
-        } else {
+       } else {
             // 1. Restart the preview if the size of surface was changed. The
             // framework may not support changing preview display on the fly.
             // 2. Start the preview now if surface was destroyed and preview
             // stopped.
-            restartPreview();
-        }
+         restartPreview();
 
+// Fix overlay error.
+/*	try { 
+	     Thread.sleep (500); 
+		} catch (InterruptedException ex) {
+		ex.printStackTrace ();
+      }        
+		restartPreview();
+	Log.v (TAG, "11111");*/
+
+       }
         // If first time initialization is not finished, send a message to do
         // it later. We want to finish surfaceChanged as soon as possible to let
         // user see preview first.
@@ -1967,23 +1976,27 @@ public class Camera extends BaseCamera implements View.OnClickListener,
         PreviewFrameLayout frameLayout =
                 (PreviewFrameLayout) findViewById(R.id.frame_layout);
         frameLayout.setAspectRatio((double) size.width / size.height);
-
         // Set a preview size that is closest to the viewfinder height and has
         // the right aspect ratio.
         List<Size> sizes = mParameters.getSupportedPreviewSizes();
         Size optimalSize = getOptimalPreviewSize(
                 sizes, (double) size.width / size.height);
-        if (optimalSize != null) {
-            Size original = mParameters.getPreviewSize();
-            if (!original.equals(optimalSize)) {
-                mParameters.setPreviewSize(optimalSize.width, optimalSize.height);
 
-                // Zoom related settings will be changed for different preview
-                // sizes, so set and read the parameters to get lastest values
-                mCameraDevice.setParameters(mParameters);
-                mParameters = mCameraDevice.getParameters();
-            }
-        }
+	if (optimalSize != null) {
+		Size original = mParameters.getPreviewSize();
+			if (!original.equals(optimalSize)) {
+				if(optimalSize.width!=848)
+					mParameters.setPreviewSize(optimalSize.width, optimalSize.height);
+				else mParameters.setPreviewSize(optimalSize.width-1, optimalSize.height);
+				     
+		// Zoom related settings will be changed for different preview
+		// sizes, so set and read the parameters to get lastest values
+		mCameraDevice.setParameters(mParameters);
+		mParameters = mCameraDevice.getParameters();
+		}
+	}
+
+// Changed: picture-size: 2592x1456 -> 2592x1936 {320x240,640x480,1280x960,1600x1200,2048x1536,2592x1456,2592x1936}
 
         // Since change scene mode may change supported values,
         // Set scene mode first,

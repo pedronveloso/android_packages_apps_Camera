@@ -60,6 +60,7 @@ public class CameraSettings {
     public static final String KEY_CONTRAST = "pref_camera_contrast_key";
     public static final String KEY_SATURATION = "pref_camera_saturation_key";
 
+    private static final String VIDEO_QUALITY_WIDE = "wide";
     private static final String VIDEO_QUALITY_HD = "hd";
     private static final String VIDEO_QUALITY_HIGH = "high";
     private static final String VIDEO_QUALITY_MMS = "mms";
@@ -440,6 +441,8 @@ public class CameraSettings {
         final int q;
         if (VIDEO_QUALITY_YOUTUBE_HD.equals(quality) || VIDEO_QUALITY_HD.equals(quality)) {
             q = CamcorderProfile.QUALITY_HD;
+        } else if (VIDEO_QUALITY_WIDE.equals(quality)) {
+            q = CamcorderProfile.QUALITY_WIDE;
         } else if (VIDEO_QUALITY_YOUTUBE.equals(quality) || VIDEO_QUALITY_HIGH.equals(quality)) {
             q = CamcorderProfile.QUALITY_HIGH;
         } else {
