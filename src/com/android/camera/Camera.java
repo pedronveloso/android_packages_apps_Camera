@@ -1761,15 +1761,6 @@ public class Camera extends BaseCamera implements View.OnClickListener,
             // stopped.
          restartPreview();
 
-// Fix overlay error.
-/*	try { 
-	     Thread.sleep (500); 
-		} catch (InterruptedException ex) {
-		ex.printStackTrace ();
-      }        
-		restartPreview();
-	Log.v (TAG, "11111");*/
-
        }
         // If first time initialization is not finished, send a message to do
         // it later. We want to finish surfaceChanged as soon as possible to let
