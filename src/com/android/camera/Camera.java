@@ -1040,7 +1040,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
                 }
             });
         }
-      //  updateSceneModeInHud();
+         updateSceneModeInHud();
     }
 
     private void attachHeadUpDisplay() {
