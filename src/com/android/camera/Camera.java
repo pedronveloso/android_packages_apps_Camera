@@ -411,7 +411,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
     }
 
     private void onZoomValueChanged(int index) {  
-     /*   if (mSmoothZoomSupported) {
+       if (mSmoothZoomSupported) {
             if (mTargetZoomValue != index && mZoomState != ZOOM_STOPPED) {
                 mTargetZoomValue = index;
                 if (mZoomState == ZOOM_START) {
@@ -423,10 +423,10 @@ public class Camera extends BaseCamera implements View.OnClickListener,
                 mCameraDevice.startSmoothZoom(index);
                 mZoomState = ZOOM_START;
             }
-        } else { */
+        } else { 
             mZoomValue = index;
             setCameraParametersWhenIdle(UPDATE_PARAM_ZOOM);
-       // }
+        }
     }
 
     private float[] getZoomRatios() {
@@ -1040,7 +1040,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
                 }
             });
         }
-        updateSceneModeInHud();
+      //  updateSceneModeInHud();
     }
 
     private void attachHeadUpDisplay() {
