@@ -1928,7 +1928,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
         }
 
         // Cannot find the one match the aspect ratio, ignore the requirement
-        if (optimalSize == null) {
+         if (optimalSize == null || optimalSize.width==848 ) {
             Log.v(TAG, "No preview size match the aspect ratio");
             minDiff = Double.MAX_VALUE;
             for (Size size : sizes) {
@@ -1937,7 +1937,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
                     minDiff = Math.abs(size.height - targetHeight);
                 }
             }
-        }
+       }
         return optimalSize;
     }
 
@@ -1985,18 +1985,13 @@ public class Camera extends BaseCamera implements View.OnClickListener,
 	if (optimalSize != null) {
 		Size original = mParameters.getPreviewSize();
 			if (!original.equals(optimalSize)) {
-				if(optimalSize.width!=848)
 					mParameters.setPreviewSize(optimalSize.width, optimalSize.height);
-				else mParameters.setPreviewSize(optimalSize.width-1, optimalSize.height);
-				     
 		// Zoom related settings will be changed for different preview
 		// sizes, so set and read the parameters to get lastest values
 		mCameraDevice.setParameters(mParameters);
 		mParameters = mCameraDevice.getParameters();
 		}
 	}
-
-// Changed: picture-size: 2592x1456 -> 2592x1936 {320x240,640x480,1280x960,1600x1200,2048x1536,2592x1456,2592x1936}
 
         // Since change scene mode may change supported values,
         // Set scene mode first,
