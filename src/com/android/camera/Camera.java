@@ -1919,13 +1919,13 @@ public class Camera extends BaseCamera implements View.OnClickListener,
         }
 
         // Cannot find the one match the aspect ratio, ignore the requirement
-         if (optimalSize == null ) {
+         if (optimalSize == null || optimalSize.width==848 ) {
             Log.v(TAG, "No preview size match the aspect ratio");
             minDiff = Double.MAX_VALUE;
             for (Size size : sizes) {
-                if ( Math.abs(size.height - targetHeight) < minDiff) {
+                if (Math.abs(size.height - targetHeight) < minDiff) {
                     optimalSize = size;
-                    minDiff = Math.abs(size.height - targetHeight); 
+                    minDiff = Math.abs(size.height - targetHeight);
                 }
             }
        }
@@ -1975,10 +1975,8 @@ public class Camera extends BaseCamera implements View.OnClickListener,
 
 	if (optimalSize != null) {
 		Size original = mParameters.getPreviewSize();
-		 if (!original.equals(optimalSize)) {
-			if(optimalSize.width!=848)	
-       				mParameters.setPreviewSize(optimalSize.width, optimalSize.height);	
-     			else    mParameters.setPreviewFrameRate(24);
+			if (!original.equals(optimalSize)) {
+					mParameters.setPreviewSize(optimalSize.width, optimalSize.height);
 		// Zoom related settings will be changed for different preview
 		// sizes, so set and read the parameters to get lastest values
 		mCameraDevice.setParameters(mParameters);
