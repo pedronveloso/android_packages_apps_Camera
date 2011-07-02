@@ -89,12 +89,12 @@ public class PreviewFrameLayout extends ViewGroup {
         frameWidth = previewWidth + horizontalPadding;
         frameHeight = previewHeight + verticalPadding;
 
-        int hSpace = ((r - l) - frameWidth) / 2;
+        int hSpace = ((r - l) - frameWidth);
         int vSpace = ((b - t) - frameHeight) / 2;
         mFrame.measure(
                 MeasureSpec.makeMeasureSpec(frameWidth, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(frameHeight, MeasureSpec.EXACTLY));
-        mFrame.layout(l + hSpace, t + vSpace, r - hSpace, b - vSpace);
+        mFrame.layout(l, t + vSpace, r - hSpace, b - vSpace);
         if (mSizeListener != null) {
             mSizeListener.onSizeChanged();
         }
