@@ -16,8 +16,8 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="camera_error_title">Kamerafehler</string>
-	<string name="cannot_connect_camera">Keine Verbindung zur Kamera möglich</string>
+    <string name="camera_error_title">Kamerafehler</string>
+    <string name="cannot_connect_camera">Keine Verbindung zur Kamera möglich</string>
     <string name="camera_label">Kamera</string>
     <string name="video_camera_label">Camcorder</string>
     <string name="gallery_camera_bucket_name">Kamerabilder</string>
@@ -26,10 +26,10 @@
 
     <string name="no_storage" product="nosdcard">Stellen Sie vor Verwendung der Kamera einen USB-Speicher bereit.</string>
     <string name="no_storage" product="default">Legen Sie vor Verwendung der Kamera eine SD-Karte ein.</string>
-	<string name="not_enough_space" product="nosdcard">Ihr USB-Speicher ist voll.</string>
+    <string name="not_enough_space" product="nosdcard">Ihr USB-Speicher ist voll.</string>
     <string name="not_enough_space" product="default">Ihre SD-Karte ist voll.</string>
     <string name="preparing_sd" product="nosdcard">USB-Speicher wird vorbereitet\u2026</string>
-    <string name="preparing_sd" product="default">"SD-Karte wird vorbereitet\u2026</string>
+    <string name="preparing_sd" product="default">SD-Karte wird vorbereitet\u2026</string>
     <string name="access_sd_fail" product="nosdcard">Auf den USB-Speicher kann nicht zugegriffen werden.</string>
     <string name="access_sd_fail" product="default">Auf die SD-Karte kann nicht zugegriffen werden.</string>
 
