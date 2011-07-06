@@ -19,14 +19,10 @@ package com.android.camera;
 
 import com.android.camera.ui.HeadUpDisplay;
 
-<<<<<<< HEAD
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
-=======
-import android.hardware.Camera.Parameters;
->>>>>>> cyanogen/gingerbread
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -39,8 +35,6 @@ public abstract class BaseCamera extends NoSearchActivity
 
     private static final String LOG_TAG = "BaseCamera";
 
-    private static final String LOG_TAG = "BaseCamera";
-
     protected ComboPreferences mPreferences;
 
     protected android.hardware.Camera mCameraDevice;
@@ -49,15 +43,10 @@ public abstract class BaseCamera extends NoSearchActivity
 
     protected FocusRectangle mFocusRectangle;
     protected String mFocusMode;
-<<<<<<< HEAD
     protected GestureDetector mFocusGestureDetector;
 
     private PreviewFrameLayout mPreviewFrameLayout;
     private Rect mPreviewRect;
-=======
-
-    protected GestureDetector mFocusGestureDetector;
->>>>>>> cyanogen/gingerbread
 
     protected boolean mPreviewing;
     protected boolean mPausing;
@@ -68,7 +57,6 @@ public abstract class BaseCamera extends NoSearchActivity
     protected static final int FOCUS_SUCCESS = 3;
     protected static final int FOCUS_FAIL = 4;
     protected int mFocusState = FOCUS_NOT_STARTED;
-<<<<<<< HEAD
 
     protected HeadUpDisplay mHeadUpDisplay;
 
@@ -82,17 +70,6 @@ public abstract class BaseCamera extends NoSearchActivity
         mPreviewRect = null;
     }
 
-=======
-
-    protected HeadUpDisplay mHeadUpDisplay;
-
-    protected void initializeTouchFocus() {
-        Log.d(LOG_TAG, "initializeTouchFocus");
-        enableTouchAEC(false);
-        mFocusGestureDetector = new GestureDetector(this, new FocusGestureListener());
-    }
-
->>>>>>> cyanogen/gingerbread
     protected void setCommonParameters() {
         // Set color effect parameter.
         String colorEffect = mPreferences.getString(CameraSettings.KEY_COLOR_EFFECT,
