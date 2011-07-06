@@ -142,12 +142,12 @@ public abstract class BaseCamera extends NoSearchActivity
             }
 
             Point touch = new Point((int) e.getX(), (int) e.getY());
-            Log.d(LOG_TAG, "touch event at " + touch + " preview rect " + mPreviewRect);
             if (!mPreviewRect.contains(touch.x, touch.y)) {
                 return true;
             }
             transformToPreviewCoords(touch);
-            Log.d(LOG_TAG, "after transform " + touch);
+            Log.d(LOG_TAG, "Got preview touch event at " + e.getX() + "," + e.getY() +
+                    ", transformed to " + touch);
 
             mFocusState = FOCUSING;
             enableTouchAEC(true);
