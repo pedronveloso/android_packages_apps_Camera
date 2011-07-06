@@ -110,9 +110,7 @@ public class PreviewFrameLayout extends ViewGroup {
         mFrame.layout(rect.left, rect.top, rect.right, rect.bottom);
 
         if (mFocus != null) {
-            int x = mFocus.getTouchIndexX();
-            int y = mFocus.getTouchIndexY();
-            mFocus.layout(x - SIZE, y - SIZE,x + SIZE,y + SIZE);
+            mFocus.redraw();
         }
 
         if (mSizeListener != null) {

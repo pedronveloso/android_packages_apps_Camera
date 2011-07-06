@@ -339,6 +339,8 @@ public class Camera extends BaseCamera implements View.OnClickListener,
         mHeadUpDisplay.setListener(new MyHeadUpDisplayListener());
         initializeHeadUpDisplay();
         initializeTouchFocus();
+        clearFocusState();
+        resetFocusIndicator();
 
         mFirstTimeInitialized = true;
         changeHeadUpDisplayState();
@@ -2085,6 +2087,8 @@ public class Camera extends BaseCamera implements View.OnClickListener,
                     mFocusMode = Parameters.FOCUS_MODE_AUTO;
                 }
             }
+            clearFocusState();
+            resetFocusIndicator();
 
             clearTouchFocusAEC();
 
