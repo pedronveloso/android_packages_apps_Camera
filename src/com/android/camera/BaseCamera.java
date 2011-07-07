@@ -193,6 +193,7 @@ public abstract class BaseCamera extends NoSearchActivity
         int width = mFocusRectangle.getWidth();
         Rect focusRect = new Rect(x - width / 2, y - width / 2, x + width / 2, y + width / 2);
         Size previewSize = mParameters.getPreviewSize();
+        int size;
 
         /* ensure the rect is fully within the preview */
         int offsetX = 0, offsetY = 0;
@@ -220,12 +221,18 @@ public abstract class BaseCamera extends NoSearchActivity
              */
             needsRect = true;
             paramName = "nv-areas-to-focus";
+            size = 80;
+            mParameters.set("nv-areas-to-focus", "1,"+(x-(size/2))+","+(y-(size/2))+","+size+","+size);
+
         } else if (mParameters.get("mot-max-areas-to-focus") != null) {
             /* Motorola's libcamera uses the same format as Nvidia's:
              * regionId,left,top,width,height
              */
             needsRect = true;
             paramName = "mot-areas-to-focus";
+            size = 80;
+            mParameters.set("mot-areas-to-focus", "1,"+(x-(size/2))+","+(y-(size/2))+","+size+","+size);
+
         } else {
             needsRect = false;
             paramName = "touch-focus";
