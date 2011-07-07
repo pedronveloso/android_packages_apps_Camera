@@ -117,23 +117,23 @@ public abstract class BaseCamera extends NoSearchActivity
         if (mFocusRectangle == null)
             return;
 
-        mFocusRectangle.setVisibility(View.VISIBLE);
+        int x = mPreviewFrameLayout.getActualWidth() / 2;
+        int y = mPreviewFrameLayout.getActualHeight() / 2;
+        mFocusRectangle.setPosition(x, y);
+
         if (mFocusMode.equals(CameraSettings.FOCUS_MODE_TOUCH)) {
             Size previewSize = mParameters.getPreviewSize();
             updateTouchFocus(previewSize.width / 2, previewSize.height / 2);
-        } else {
-            int x = mPreviewFrameLayout.getActualWidth() / 2;
-            int y = mPreviewFrameLayout.getActualHeight() / 2;
-            mFocusRectangle.setPosition(x, y);
+            mFocusRectangle.setVisibility(View.VISIBLE);
         }
     }
 
     private class FocusGestureListener extends GestureDetector.SimpleOnGestureListener {
         private void transformToPreviewCoords(Point point) {
-            float x = point.x - mPreviewRect.left;
-            float y = point.y - mPreviewRect.top;
             Size previewSize = mParameters.getPreviewSize();
-
+            float x = point.x;
+            float y = point.y;
+ 
             point.x = (int) ((previewSize.width * x) / mPreviewRect.width());
             point.y = (int) ((previewSize.height * y) / mPreviewRect.height());
         }
@@ -151,14 +151,28 @@ public abstract class BaseCamera extends NoSearchActivity
             if (!mPreviewRect.contains(touch.x, touch.y)) {
                 return true;
             }
+
+            /*
+             * Move point so the coordinate system origin is at the upper
+             * left corner of the preview layout
+             */
+            touch.offset(-mPreviewRect.left, -mPreviewRect.top);
+
+            mFocusRectangle.setPosition(touch.x, touch.y);
+            mFocusRectangle.setVisibility(View.VISIBLE);
+            mFocusRectangle.showStart();
+
+            /*
+             * Scale coordinate system so the point is given in preview coordinates
+             */
             transformToPreviewCoords(touch);
+
             Log.d(LOG_TAG, "Got preview touch event at " + e.getX() + "," + e.getY() +
                     ", transformed to " + touch);
 
             mFocusState = FOCUSING;
             enableTouchAEC(true);
             updateTouchFocus(touch.x, touch.y);
-            mFocusRectangle.showStart();
 
             mCameraDevice.autoFocus(new android.hardware.Camera.AutoFocusCallback() {
                 @Override
@@ -185,9 +199,6 @@ public abstract class BaseCamera extends NoSearchActivity
     private void updateTouchFocus(int x, int y) {
         Log.d(LOG_TAG, "updateTouchFocus x=" + x + " y=" + y);
 
-        mFocusRectangle.setVisibility(View.VISIBLE);
-        mFocusRectangle.setPosition(x, y);
-
         boolean needsRect;
         String paramName;
         int width = mFocusRectangle.getWidth();
@@ -207,6 +218,8 @@ public abstract class BaseCamera extends NoSearchActivity
             offsetY = previewSize.height - focusRect.bottom;
         }
         focusRect.offset(offsetX, offsetY);
+
+        Log.d(LOG_TAG, "determined focus rect as " + focusRect);
 
         if (mParameters.get("nv-max-areas-to-focus") != null) {
             /* Example region log output (for approx middle):
