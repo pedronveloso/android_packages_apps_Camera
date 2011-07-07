@@ -204,6 +204,7 @@ public abstract class BaseCamera extends NoSearchActivity
         int width = mFocusRectangle.getWidth();
         Rect focusRect = new Rect(x - width / 2, y - width / 2, x + width / 2, y + width / 2);
         Size previewSize = mParameters.getPreviewSize();
+        int size;
 
         /* ensure the rect is fully within the preview */
         int offsetX = 0, offsetY = 0;
