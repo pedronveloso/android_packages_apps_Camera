@@ -220,7 +220,7 @@ public abstract class BaseCamera extends NoSearchActivity
              */
             needsRect = true;
             paramName = "nv-areas-to-focus";
-        } else if (mParameters.get("mot-max-areas-to-focus") != null) {
+       } else if (mParameters.get("mot-max-areas-to-focus") != null) {
             /* Motorola's libcamera uses the same format as Nvidia's:
              * regionId,left,top,width,height
              */
