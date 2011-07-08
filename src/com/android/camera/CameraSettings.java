@@ -233,9 +233,9 @@ public class CameraSettings {
                 filterUnsupportedOptions(group, focusMode, new ArrayList<String>());
             } else {
                 List<String> focusModes = mParameters.getSupportedFocusModes();
-                boolean allowTouchFocus = isHtcCamera(mParameters) ||
-                                          isNVCamera(mParameters)  ||
-                                          mParameters.get("mot-areas-to-focus") != null;
+                boolean allowTouchFocus = mParameters.get("touch-focus") != null ||       /* HTC */
+                                          mParameters.get("nv-areas-to-focus") != null || /* Nvidia */
+                                          mParameters.get("mot-areas-to-focus") != null;  /* Motorola */
 
                 if (allowTouchFocus) {
                     focusModes.add(FOCUS_MODE_TOUCH);
@@ -513,7 +513,8 @@ public class CameraSettings {
     }
 
     /**
-     * Enable video mode for HTC cameras. This is needed for OV8810 sensors.
+     * Tell camera driver whether video mode is enabled or not,
+     * if supported/requested by driver.
      *
      * @param params
      * @param on
@@ -521,7 +522,7 @@ public class CameraSettings {
     public static void setVideoMode(Parameters params, boolean on) {
         if (params.get("cam-mode") != null) {
             params.set("cam-mode", on ? "1" : "0");
-        } else if (isNVCamera(params)) {
+        } else if (params.get("nv-mode-hint") != null) {
             params.set("nv-mode-hint", on ? "video" : "still");
         }
     }
@@ -533,18 +534,9 @@ public class CameraSettings {
      * @param on
      */
     public static void setContinuousAf(Parameters params, boolean on) {
-        if (isHtcCamera(params)) {
+        if (params.get("enable-caf") != null) {
             params.set("enable-caf", on ? "on" : "off");
         }
-    }
-
-    // Hackish way to know if this is an HTC camera
-    private static boolean isHtcCamera(Parameters params) {
-        return params.get("taking-picture-zoom") != null;
-    }
-
-    private static boolean isNVCamera(Parameters params) {
-        return params.get("nv-mode-hint") != null;
     }
 
     /**
@@ -554,7 +546,7 @@ public class CameraSettings {
      * @param params
      */
     public static void enableHighFrameRateFHD(Parameters params) {
-        if (!mSupportsNvHFR || !isNVCamera(params))
+        if (!mSupportsNvHFR || params.get("nv-sensor-mode") == null)
             return;
         Log.v(TAG,"Enabling 1080p@30fps on nvcamera");
         // Not listed as a supported parameter, force it
