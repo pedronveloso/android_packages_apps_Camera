@@ -519,7 +519,7 @@ public class CameraSettings {
      * @param on
      */
     public static void setVideoMode(Parameters params, boolean on) {
-        if (isHtcCamera(params)) {
+        if (params.get("cam-mode") != null) {
             params.set("cam-mode", on ? "1" : "0");
         } else if (isNVCamera(params)) {
             params.set("nv-mode-hint", on ? "video" : "still");
