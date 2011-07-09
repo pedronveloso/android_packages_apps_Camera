@@ -49,6 +49,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.MessageQueue;
+import android.preference.CheckBoxPreference;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
@@ -222,7 +223,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
     // multiple cameras support
     private int mNumberOfCameras;
     private int mCameraId;
-
+    private SharedPreferences prefs;
     private int mImageWidth = 0;
     private int mImageHeight = 0;
 
@@ -907,7 +908,8 @@ public class Camera extends BaseCamera implements View.OnClickListener,
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
+        prefs = getSharedPreferences("com.android.camera_preferences", 0);
+        powerShutter(prefs);
         setContentView(R.layout.camera);
         mSurfaceView = (SurfaceView) findViewById(R.id.camera_preview);
 
@@ -1518,7 +1520,6 @@ public class Camera extends BaseCamera implements View.OnClickListener,
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        SharedPreferences prefs = getSharedPreferences("com.android.camera_preferences", 0);
         boolean searchShutter = prefs.getBoolean("search_shutter_enabled", false);
         boolean volUpShutter = prefs.getBoolean("vol_up_shutter_enabled", false);
         boolean volDownShutter = prefs.getBoolean("vol_down_shutter_enabled", false);
@@ -1559,6 +1560,11 @@ public class Camera extends BaseCamera implements View.OnClickListener,
                     return false;
                 }
 
+                return true;
+            case KeyEvent.KEYCODE_POWER:
+                if (powerShutter(prefs)){
+                    doFocus(true);
+                }
                 return true;
             case KeyEvent.KEYCODE_DPAD_CENTER:
                 // If we get a dpad center event without any focused view, move
@@ -1633,7 +1639,6 @@ public class Camera extends BaseCamera implements View.OnClickListener,
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        SharedPreferences prefs = getSharedPreferences("com.android.camera_preferences", 0);
         boolean longFocus = prefs.getBoolean("long_focus_enabled", false);
 
         switch (keyCode) {
@@ -1646,6 +1651,11 @@ public class Camera extends BaseCamera implements View.OnClickListener,
                     }
                 }
 
+                return true;
+            case KeyEvent.KEYCODE_POWER:
+                if (powerShutter(prefs)){
+                    doSnap();
+                }
                 return true;
             case KeyEvent.KEYCODE_FOCUS:
                 if (mFirstTimeInitialized) {
