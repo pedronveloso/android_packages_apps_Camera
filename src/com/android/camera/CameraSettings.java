@@ -88,6 +88,10 @@ public class CameraSettings {
     private final Parameters mParameters;
     private final CameraInfo[] mCameraInfo;
     private final int mCameraId;
+
+    private static String sTouchFocusParameter;
+    private static boolean sTouchFocusNeedsRect;
+
     // Nvidia 1080p high framerate
     private static boolean mSupportsNvHFR;
 
@@ -233,7 +237,7 @@ public class CameraSettings {
                 filterUnsupportedOptions(group, focusMode, new ArrayList<String>());
             } else {
                 List<String> focusModes = mParameters.getSupportedFocusModes();
-                if (touchFocusPossible()) {
+                if (checkTouchFocus()) {
                     focusModes.add(FOCUS_MODE_TOUCH);
                 }
                 filterUnsupportedOptions(group, focusMode, focusModes);
@@ -264,24 +268,38 @@ public class CameraSettings {
          }
     }
 
-    private boolean touchFocusPossible() {
+    private boolean checkTouchFocus() {
         if (mParameters.get("taking-picture-zoom") != null) {
             /* HTC camera, which always have touch-to-focus support. Unfortunately
              * the touch-to-focus parameter 'touch-focus' is not present at initialization
              * time, which is why we need to resort to another HTC specific parameter
              */
+            sTouchFocusParameter = "touch-focus";
+            sTouchFocusNeedsRect = false;
             return true;
         }
         if (mParameters.get("nv-areas-to-focus") != null) {
             /* Nvidia camera with touch-to-focus support */
+            sTouchFocusParameter = "nv-areas-to-focus";
+            sTouchFocusNeedsRect = true;
             return true;
         }
         if (mParameters.get("mot-areas-to-focus") != null) {
             /* Motorola camera with touch-to-focus support */
+            sTouchFocusParameter = "mot-areas-to-focus";
+            sTouchFocusNeedsRect = true;
             return true;
         }
 
         return false;
+    }
+
+    public static String getTouchFocusParameterName() {
+        return sTouchFocusParameter;
+    }
+
+    public static boolean getTouchFocusNeedsRect() {
+        return sTouchFocusNeedsRect;
     }
 
     private void buildExposureCompensation(
