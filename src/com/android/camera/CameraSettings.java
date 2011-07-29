@@ -95,6 +95,9 @@ public class CameraSettings {
     // Nvidia 1080p high framerate
     private static boolean mSupportsNvHFR;
 
+    // Samsung camcorder mode
+    private static boolean mSamsungCamMode;
+
     public static final String FOCUS_MODE_TOUCH = "touch";
 
     public CameraSettings(Activity activity, Parameters parameters,
@@ -359,6 +362,7 @@ public class CameraSettings {
         cameraId.setLargeIconIds(largeIconIds);
 
         mSupportsNvHFR = mContext.getResources().getBoolean(R.bool.supportsNvHighBitrateFullHD);
+        mSamsungCamMode = mContext.getResources().getBoolean(R.bool.needsSamsungCamMode);
     }
 
     private static boolean removePreference(PreferenceGroup group, String key) {
@@ -558,6 +562,8 @@ public class CameraSettings {
             params.set("cam-mode", on ? "1" : "0");
         } else if (params.get("nv-mode-hint") != null) {
             params.set("nv-mode-hint", on ? "video" : "still");
+        } else if (mSamsungCamMode) {
+            params.set("cam_mode", on ? "1" : "0");
         }
     }
 
