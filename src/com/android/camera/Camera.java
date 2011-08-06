@@ -1834,6 +1834,9 @@ public class Camera extends BaseCamera implements View.OnClickListener,
         Util.setCameraDisplayOrientation(this, mCameraId, mCameraDevice);
         setCameraParameters(UPDATE_PARAM_ALL);
 
+        CameraSettings.setVideoMode(mParameters, false);
+        mCameraDevice.setParameters(mParameters);
+
         mCameraDevice.setErrorCallback(mErrorCallback);
 
         try {
@@ -1852,8 +1855,6 @@ public class Camera extends BaseCamera implements View.OnClickListener,
         */
         mParameters = mCameraDevice.getParameters();
         mZoomMax = mParameters.getMaxZoom();
-        CameraSettings.setVideoMode(mParameters, false);
-        mCameraDevice.setParameters(mParameters);
     }
 
     private void stopPreview() {
