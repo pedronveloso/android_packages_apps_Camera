@@ -70,7 +70,6 @@ import android.view.WindowManager;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.TextView;
 
 import com.android.camera.gallery.IImage;
@@ -1869,10 +1868,6 @@ public class Camera extends BaseCamera implements View.OnClickListener,
         // If we're previewing already, stop the preview first (this will blank
         // the screen).
         if (mPreviewing) stopPreview();
-        clearFocusState();
-        if (CameraSettings.FOCUS_MODE_TOUCH.equals(mFocusMode)) {
-            resetFocusIndicator();
-        }
 
         setPreviewDisplay(mSurfaceHolder);
         Util.setCameraDisplayOrientation(this, mCameraId, mCameraDevice);
@@ -2461,13 +2456,6 @@ public class Camera extends BaseCamera implements View.OnClickListener,
             switchCameraId(cameraId);
         } else {
             setCameraParametersWhenIdle(UPDATE_PARAM_PREFERENCE);
-        }
-
-        String focusMode = mPreferences.getString(CameraSettings.KEY_FOCUS_MODE, null);
-        if ("touch".equals(focusMode) && !focusMode.equals(mFocusMode)) {
-            // Show the user a hint since they've just enabled touch-to-focus
-            Toast.makeText(this, R.string.touch_focus_enabled,
-                    Toast.LENGTH_LONG).show();
         }
     }
 
