@@ -71,6 +71,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import com.android.camera.gallery.IImage;
 import com.android.camera.gallery.IImageList;
@@ -103,6 +104,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
     private static final int RESTART_PREVIEW = 3;
     private static final int CLEAR_SCREEN_DELAY = 4;
     private static final int SET_CAMERA_PARAMETERS_WHEN_IDLE = 5;
+    private static final int CAMERA_TIMER = 6;
 
     // The subset of parameters we need to update in setCameraParameters().
     private static final int UPDATE_PARAM_INITIALIZE = 1;
@@ -129,6 +131,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
     private boolean mSmoothZoomSupported = false;
     private int mZoomValue;  // The current zoom value.
     private int mZoomMax;
+    private boolean mTimerMode = false;
     private int mTargetZoomValue;
 
     private Parameters mInitialParams;
@@ -169,6 +172,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
     private Uri mSaveUri;
 
     private ImageCapture mImageCapture = null;
+    private TextView mRecordingTimeView;
 
     private boolean mFirstTimeInitialized;
     private static  int keypresscount = 0;
@@ -260,6 +264,11 @@ public class Camera extends BaseCamera implements View.OnClickListener,
 
                 case SET_CAMERA_PARAMETERS_WHEN_IDLE: {
                     setCameraParametersWhenIdle(0);
+                    break;
+                }
+
+                case CAMERA_TIMER: {
+                    updateTimer(msg.arg1);
                     break;
                 }
             }
@@ -912,7 +921,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
         powerShutter(prefs);
         setContentView(R.layout.camera);
         mSurfaceView = (SurfaceView) findViewById(R.id.camera_preview);
-
+        mRecordingTimeView = (TextView) findViewById(R.id.recording_time);
         mPreferences = new ComboPreferences(this);
         CameraSettings.upgradeGlobalPreferences(mPreferences.getGlobal());
         mCameraId = CameraSettings.readPreferredCameraId(mPreferences);
@@ -1650,7 +1659,6 @@ public class Camera extends BaseCamera implements View.OnClickListener,
                         doSnap();
                     }
                 }
-
                 return true;
             case KeyEvent.KEYCODE_POWER:
                 if (powerShutter(prefs)){
@@ -1666,9 +1674,24 @@ public class Camera extends BaseCamera implements View.OnClickListener,
         return super.onKeyUp(keyCode, event);
     }
 
+    private void updateTimer(int timerSeconds) {
+        mRecordingTimeView.setText(String.format("%d:%02d", timerSeconds / 60, timerSeconds % 60));
+        timerSeconds--;
+        if (timerSeconds < 0) {
+            autoFocus();
+            mFocusState = FOCUSING_SNAP_ON_FINISH;
+            doFocus(true);
+        } else {
+            Message timerMsg = Message.obtain();
+            timerMsg.arg1 = timerSeconds;
+            timerMsg.what = CAMERA_TIMER;
+            mHandler.sendMessageDelayed(timerMsg, 1000);
+        }
+    }
+
     private void doSnap() {
         if (mHeadUpDisplay.collapse()) return;
-
+        if (mTimerMode) return;
         Log.d(TAG, "doSnap: mFocusState=" + mFocusState + " mFocusMode=" + mFocusMode);
         // If the user has half-pressed the shutter and focus is completed, we
         // can take the photo right away. If the focus mode is infinity, we can
@@ -1691,6 +1714,27 @@ public class Camera extends BaseCamera implements View.OnClickListener,
     }
 
     private void doFocus(boolean pressed) {
+        if (!mTimerMode && pressed) {
+            if (mCaptureMode.equals(getResources().getString(
+                    R.string.pref_camera_capturemode_entry_timer))) {
+                mTimerMode = true;
+                mShutterButton.setImageDrawable(getResources().getDrawable(
+                        R.drawable.btn_ic_video_record_stop));
+                mRecordingTimeView.setVisibility(View.VISIBLE);
+                updateTimer(Integer.valueOf(prefs.getString("timer_duration", "10")));
+                return;
+            }
+        } else if (mTimerMode && pressed) {
+            mShutterButton.setImageDrawable(getResources().getDrawable(
+                    R.drawable.btn_ic_camera_shutter));
+            mTimerMode = false;
+            mHandler.removeMessages(CAMERA_TIMER);
+            mRecordingTimeView.setVisibility(View.GONE);
+            return;
+        } else if (mTimerMode && !pressed) {
+            return;
+        }
+
         // Do the focus if the mode is not infinity.
         if (mHeadUpDisplay.collapse()) return;
         if (!(mFocusMode.equals(Parameters.FOCUS_MODE_INFINITY)
@@ -2087,6 +2131,11 @@ public class Camera extends BaseCamera implements View.OnClickListener,
             mFocusMode = mPreferences.getString(
                     CameraSettings.KEY_FOCUS_MODE,
                     getString(R.string.pref_camera_focusmode_default));
+
+            // Set capture mode.
+            mCaptureMode = mPreferences.getString(
+                    CameraSettings.KEY_CAPTURE_MODE,
+                    getString(R.string.pref_camera_capturemode_entry_timer));
 
             if (isSupported(mFocusMode, mParameters.getSupportedFocusModes())) {
                 mParameters.setFocusMode(mFocusMode);
