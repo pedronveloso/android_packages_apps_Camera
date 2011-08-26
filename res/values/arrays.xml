@@ -39,8 +39,8 @@
 
     <array name="video_quality_icons" translatable="false">
         <item>@drawable/ic_viewfinder_video_quality_hd</item>
-        <item>@drawable/ic_viewfinder_video_quality_high</item>
         <item>@drawable/ic_viewfinder_video_quality_wide</item>
+        <item>@drawable/ic_viewfinder_video_quality_high</item>
         <item>@drawable/ic_viewfinder_video_quality_low</item>
         <item>@drawable/ic_viewfinder_video_quality_mms</item>
         <item>@drawable/ic_viewfinder_video_quality_youtubehd</item>
@@ -93,7 +93,7 @@
         <item>2560x1920</item>
         <item>2592x1952</item>
         <item>2592x1552</item>
-        <item>2592x1456</item> 
+        <item>2592x1456</item>
         <item>2560x1712</item>
         <item>2304x1728</item>
         <item>2048x1536</item>
