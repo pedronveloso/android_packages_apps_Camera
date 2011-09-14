@@ -253,7 +253,7 @@
     <string name="pref_camera_settings_focus">Préfocus</string>
     <string name="pref_camera_settings_focus_summary">Adapter le focus avant de prendre la photo</string>
     <string name="pref_camera_settings_long_focus">Focus Long</string>
-    <string name="pref_camera_settings_long_focus_summary">Conserver le bouton enfoncé pour adapter le focus, relacher pour prendre la photo</string>
+    <string name="pref_camera_settings_long_focus_summary">Laisser le bouton enfoncé pour adapter le focus, relâcher pour prendre la photo</string>
 
     <!-- Advanced options label -->
     <string name="advanced_options_label">Options avancées</string>
